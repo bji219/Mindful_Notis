@@ -1,6 +1,12 @@
 # Mindful Notification Customizer
 I enjoy learning from YouTube videos, but I hate falling into YouTube rabbit holes. Everyone has been there - first you're watching a video about the James Webb Space Telescope, next thing you know 4 hours later you somehow ended up 3 hours into a flat-earth conspiracy video narrated entirely with textbox subtitles that only has 27 views. I want to watch videos that genuinely interest me, but I don't want to have to open youtube.com to check if my favorite creators have posted. That's where this comes in!
 
+## Features 
+- Selenium Web Scraper for YouTube videos
+- Spotify Web API interface for Podcasts
+- Email notification and message
+- Cron Job implementation 
+
 ## Selenium Web Scraper for YouTube
 I included the meat and potatoes of what is going on below- using Selenium and Chromedriver for Python 3 I find the video metadata on the homepage of the YouTube creators that I specify. 
 
@@ -26,7 +32,7 @@ def scrape_vids():
 ```
 
 ## Spotify Web API
-Check out the [Spotify Web API](https://developer.spotify.com/documentation/web-api/). This was the tool I used to find podcast metadata for my scraper! See below. 
+Check out the [Spotify Web API](https://developer.spotify.com/documentation/web-api/). You will need to set up some background info on the Spotify Developer portal, but afterwards it is pretty simple. In my case I am using a library called [Spotipy](https://spotipy.readthedocs.io/en/2.22.0/) which is basically a python wrapper for the web API. I used this tool to find podcast metadata for the scraper! See below. 
 ```python
 # Podcast Scraping Function
 def pod_scrape(val):
@@ -83,6 +89,7 @@ def send_email(data):
         smtp.login(email,pw)
         smtp.sendmail(email,email, msg.as_string())
 ```
+A Google App password _must be generated_ for this to interface with Gmail. This can be configured [here](https://myaccount.google.com/security?hl=en). This variable in the code ```pw = '' ``` is looking for the app password, _not_ your normal email account password. 
 
 ## Cron Job
 The whole point of this code is to service as a notification generator. Using cron on my mac will allow me to run this Python code at regular intervals. Run ```crontab -e``` in your terminal to create a recurring job for your computer to run. I have set my cron job to run every monday at 3:33pm. 
@@ -100,9 +107,10 @@ Since the writing of this post, the only video that was uploaded within the wind
 
 ![](/SpotiMind.png)
 
-## Things to Implement
+## Features to Implement
 - SSL safety: currently I am running SMTP without SSL which is unsafe, but I have no sensitive information on the sites I am scraping. I keep getting an error involving SSL certificartes, which seems to be common but I haven't handled it yet.
 ```
 [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate
 ```
+- Convert from selenium web scraping to YouTube API calls for faster code
 - Open to suggestions!
