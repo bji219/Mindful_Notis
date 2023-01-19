@@ -39,9 +39,11 @@ Since the writing of this post, the only video that was uploaded within the wind
 
 ![](/MindfulNoti.png)
 
+![](/SpotiMind.png)
+
 ## Things to Implement
 - SSL safety: currently I am running SMTP without SSL which is unsafe, but I have no sensitive information on the sites I am scraping. I keep getting an error involving SSL certificartes, which seems to be common but I haven't handled it yet.
 ```
 [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate
 ```
-- Spotify notifications (Mindify): I want to send another email which notifies me when my favorite podcasts have uploaded new episodes. Should be able to do this with Spotify Web API
+- Open to suggestions!
