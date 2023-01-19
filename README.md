@@ -25,6 +25,65 @@ def scrape_vids():
         pass
 ```
 
+## Spotify Web API
+Check out the [Spotify Web API](https://developer.spotify.com/documentation/web-api/). This was the tool I used to find podcast metadata for my scraper! See below. 
+```python
+# Podcast Scraping Function
+def pod_scrape(val):
+    data = []
+    pod = sp.shows([val],market='US')
+    des = pod['shows'][0]['html_description']
+    pub = pod['shows'][0]['publisher']
+    link = pod['shows'][0]['external_urls']['spotify']
+    pod_title = pod['shows'][0]['name']
+
+    # Get latest episode metadata from podcast
+    show_eps = sp.show_episodes(val,limit=1)
+    desc = show_eps['items'][0]['description']
+    show_link = show_eps['items'][0]['external_urls']['spotify']
+    show_title = show_eps['items'][0]['name']
+    show_release = show_eps['items'][0]['release_date']
+    ep_num = show_eps['total']
+    data.append({
+                'pod_title':pod_title,
+                'pod_url': show_link,
+                'show_title': show_title,
+                'authors': pub,
+                'r_date': show_release,
+                'description': desc,
+                'ep_num': ep_num
+                })
+```
+
+## Emails with Python
+This is essentially the same function for both scrapers minus the message text. This isn't exactly safe because we bypass SSL but more on that below.
+```python
+# Email function
+def send_email(data):
+    # Create a text/plain message
+    msg = EmailMessage()
+    # initialize message
+    body = ''
+    for i in data:
+        individual = 'Here is the latest podcast from ' + i[0]['pod_title'] + ':\n\n' + 'Episode #' + str(
+            i[0]['ep_num']) + ', \"' + i[0]['show_title'] + '\"\n\n' + i[0][
+                         'pod_url'] + '\n\n' + 'Release date: ' + i[0]['r_date'] + '\n\n' + 'Show Notes:\n\n' + i[0][
+                         'description']
+
+        body = body + individual
+
+    msg.set_content(body)
+
+    msg['Subject'] = 'New Podcast Alert!'
+    msg['From'] = email
+    msg['To'] = email
+
+    # Send email with SMTP
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+        smtp.login(email,pw)
+        smtp.sendmail(email,email, msg.as_string())
+```
+
 ## Cron Job
 The whole point of this code is to service as a notification generator. Using cron on my mac will allow me to run this Python code at regular intervals. Run ```crontab -e``` in your terminal to create a recurring job for your computer to run. I have set my cron job to run every monday at 3:33pm. 
 
