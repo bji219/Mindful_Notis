@@ -98,6 +98,7 @@ The whole point of this code is to service as a notification generator. Using cr
 SHELL=/bin/bash
 PATH=/usr/local/bin/:/usr/bin:/usr/sbin
 33 15 * * 1 export DISPLAY=:0 && cd /Path/To/Project && python3 MindfulNotis.py
+33 15 * * 1 export DISPLAY=:0 && cd /Path/To/Project && python3 SpotiMind.py
 ```
 
 ## The result
