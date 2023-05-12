@@ -74,7 +74,7 @@ def send_email(data):
         individual = 'Here is the latest podcast from ' + i[0]['pod_title'] + ':\n\n' + 'Episode #' + str(
             i[0]['ep_num']) + ', \"' + i[0]['show_title'] + '\"\n\n' + i[0][
                          'pod_url'] + '\n\n' + 'Release date: ' + i[0]['r_date'] + '\n\n' + 'Show Notes:\n\n' + i[0][
-                         'description']
+                         'description'] + '\n\n'
 
         body = body + individual
 
@@ -98,6 +98,29 @@ The whole point of this code is to service as a notification generator. Using cr
 SHELL=/bin/bash
 PATH=/usr/local/bin/:/usr/bin:/usr/sbin
 33 15 * * 4 cd ~ && . mindful_notis.sh
+```
+
+The shell script looks like this:
+```
+#!/bin/bash
+
+# Change to working directory
+cd /working/directory
+
+# Activate virtual environment
+source venv/bin/activate
+
+# Run notification scripts
+python3 SpotiMind.py >/tmp/stout2.log 2>/tmp/stderr2.log
+wait
+
+python3 MindfulNotis.py >/tmp/stdout.log 2>/tmp/stderr.log
+wait
+
+# Clean up
+deactivate
+cd ~
+
 ```
 
 ## The result
